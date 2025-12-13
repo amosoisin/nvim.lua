@@ -53,6 +53,11 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
   callback = Set2extab,
 })
 
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  group = aug_indent,
+  pattern = "*.lua",
+  callback = Set2extab,
+})
 
 -- =========
 -- 一般オプション
