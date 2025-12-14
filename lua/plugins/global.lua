@@ -110,4 +110,10 @@ return {
       -- options go here
     }
   },
+  {
+    "RRethy/vim-illuminate",
+    config = function()
+      require("plugins.config.vim-illuminate")
+    end
+  },
 }
