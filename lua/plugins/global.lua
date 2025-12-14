@@ -2,8 +2,14 @@ return {
   {
     "Mofiqul/dracula.nvim",
     config = function()
-      vim.cmd("colorscheme dracula-soft")
+--      vim.cmd("colorscheme dracula-soft")
     end,
+  },
+  {
+    "EdenEast/nightfox.nvim",
+    config = function()
+      vim.cmd("colorscheme duskfox")
+    end
   },
   {
     'nvim-lualine/lualine.nvim',
