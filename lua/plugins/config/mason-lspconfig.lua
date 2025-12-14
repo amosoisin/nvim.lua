@@ -5,6 +5,9 @@ require("mason-lspconfig").setup({})
 vim.lsp.enable("pyright")
 vim.lsp.enable("bashls")
 vim.lsp.enable("clangd")
+vim.lsp.enable("lua_ls")
+vim.lsp.enable("ts_ls")
+vim.lsp.enable("docker_language_server")
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(_)
