@@ -174,4 +174,11 @@ return {
           -- add any options here
       }
   },
+  {
+      'smoka7/hop.nvim',
+      version = "*",
+      opts = {
+          keys = 'etovxqpdygfblzhckisuran'
+      }
+  },
 }
