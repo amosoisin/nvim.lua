@@ -19,6 +19,12 @@ return {
     end,
   },
   {
+    "levouh/tint.nvim",
+    config = function()
+      require("tint").setup()
+    end,
+  },
+  {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
     opts = {}
