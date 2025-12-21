@@ -136,4 +136,10 @@ return {
       },
     opts = { additional_targets = { "“", "”" } },
   },
+  {
+    "FotiadisM/tabset.nvim",
+    config = function()
+        require("plugins.config.tabset")
+    end,
+  },
 }
