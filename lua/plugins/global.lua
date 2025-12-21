@@ -144,4 +144,11 @@ return {
         require("plugins.config.tabset")
     end,
   },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = { "BufNewFile", "BufReadPre" },
+    config = function()
+      require("plugins.config.nvim-treesitter-context")
+    end,
+  },
 }
