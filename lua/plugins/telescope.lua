@@ -12,7 +12,10 @@ return {
     },
     opts = {
       -- your config goes here
-    }
+    },
+    config = function()
+      vim.keymap.set({'n', 'v'}, "<leader>tg", require("telescope.builtin").grep_string)
+    end,
   },
   {
     'nvim-telescope/telescope-fzf-native.nvim',
