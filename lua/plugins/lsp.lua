@@ -11,6 +11,8 @@ return {
       { "williamboman/mason.nvim" },
       { "neovim/nvim-lspconfig" },
       { "echasnovski/mini.completion", version = false },
+      { "jay-babu/mason-null-ls.nvim" },
+      { "nvimtools/none-ls.nvim" },
     },
     config = function()
       require("plugins/config/mason-lspconfig")
@@ -44,5 +46,12 @@ return {
           'nvim-treesitter/nvim-treesitter', -- optional
           'nvim-tree/nvim-web-devicons',     -- optional
       }
+  },
+  {
+    "nvimtools/none-ls.nvim",
+    event = { "BufNewFile", "BufReadPre" },
+    config = function()
+      require("plugins.config.none-ls")
+    end,
   },
 }
