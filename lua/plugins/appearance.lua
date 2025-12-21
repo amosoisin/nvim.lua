@@ -63,4 +63,9 @@ return {
     -- Optional: Lazy load Incline
     event = 'VeryLazy',
   },
+  {
+    "chentoast/marks.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
 }
