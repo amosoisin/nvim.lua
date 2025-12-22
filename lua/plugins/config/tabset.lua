@@ -18,6 +18,11 @@ require("tabset").setup({
       tabstop = 8,
       expandtab = false,
     },
+    make = {
+      tabwidth = 8,
+      tabstop = 8,
+      expandtab = false,
+    },
     html = {
       tabwidth = 2,
       tabstop = 2,
