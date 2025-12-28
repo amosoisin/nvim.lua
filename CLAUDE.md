@@ -232,7 +232,15 @@ return {
 npm install -g language-server-name
 
 # 2. lua/lsp/[server].luaを作成
-# vim.lsp.config()とvim.lsp.enable()を記述
+# 以下の形式で設定を記述：
+# ---@type vim.lsp.Config
+# vim.lsp.config.server_name = {
+#   cmd = { "server-command", "--stdio" },
+#   filetypes = { "filetype" },
+#   root_markers = { ".git" },
+#   settings = {},
+# }
+# vim.lsp.enable("server_name")
 
 # 3. lua/lsp/init.luaに追加
 require("lsp.server_name")
@@ -381,6 +389,32 @@ mason.nvim、mason-lspconfig.nvim、nvim-lspconfigプラグインを削除し、
 **最終状態:**
 - 有効LSPサーバー: bashls, pyright, ts_ls, clangd（全て動作確認済み）
 - すべての既存LSP機能を維持しながら、プラグイン依存を削減した安定構成
+
+### ✅ ブログ記事推奨への対応完了（2025-12-29）
+
+[eiji.page記事](https://eiji.page/blog/neovim-update-2025-03/)のNeovim 0.11ビルトインLSPベストプラクティスに準拠するよう、LSP設定を段階的に改善しました。
+
+**実施内容:**
+
+1. **共通LSP設定の追加**
+   - `lua/config/lsp.lua`に`vim.lsp.config('*', {...})`による全サーバー共通設定を追加
+   - capabilitiesの一元管理（completion、semantic tokens等）
+   - 個別設定と自動マージされる設計
+
+2. **型アノテーションの追加**
+   - 全LSP設定ファイルに`---@type vim.lsp.Config`アノテーションを追加
+   - Lua LSPによる型チェックと補完が有効化
+
+3. **記法の統一（ドット記法）**
+   - 従来の関数呼び出し記法: `vim.lsp.config("server", {...})`
+   - 新しいドット記法: `vim.lsp.config.server = {...}`
+   - より慣用的でLuaらしい記述スタイルに統一
+   - 対象ファイル: 全7サーバー（bashls, pyright, ts_ls, clangd, lua_ls, rust_analyzer, docker_language_server）
+
+**改善効果:**
+- 設定の保守性向上（DRY原則に準拠）
+- 型安全性の強化（エディタ上でのエラー検出）
+- Lua言語の慣用的なスタイルに統一
 
 ---
 

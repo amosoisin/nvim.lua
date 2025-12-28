@@ -1,5 +1,6 @@
 -- TypeScript Language Server設定
-vim.lsp.config("ts_ls", {
+---@type vim.lsp.Config
+vim.lsp.config.ts_ls = {
   cmd = { "typescript-language-server", "--stdio" },
   filetypes = {
     "javascript",
@@ -14,6 +15,6 @@ vim.lsp.config("ts_ls", {
     ".git",
   },
   settings = {},
-})
+}
 
 vim.lsp.enable("ts_ls")

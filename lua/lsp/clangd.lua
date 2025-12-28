@@ -1,5 +1,6 @@
 -- C/C++ Language Server設定 (clangd)
-vim.lsp.config("clangd", {
+---@type vim.lsp.Config
+vim.lsp.config.clangd = {
   cmd = {
     "clangd",
     "--background-index",
@@ -16,6 +17,6 @@ vim.lsp.config("clangd", {
     ".git",
   },
   settings = {},
-})
+}
 
 vim.lsp.enable("clangd")

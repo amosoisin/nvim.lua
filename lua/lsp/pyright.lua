@@ -1,5 +1,6 @@
 -- Python Language Server設定 (Pyright)
-vim.lsp.config("pyright", {
+---@type vim.lsp.Config
+vim.lsp.config.pyright = {
   cmd = { "pyright-langserver", "--stdio" },
   filetypes = { "python" },
   root_markers = {
@@ -20,6 +21,6 @@ vim.lsp.config("pyright", {
       },
     },
   },
-})
+}
 
 vim.lsp.enable("pyright")

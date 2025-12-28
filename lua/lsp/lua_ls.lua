@@ -3,7 +3,8 @@
 -- または: brew install lua-language-server (macOS)
 -- または: Dockerfileに追加
 
-vim.lsp.config("lua_ls", {
+---@type vim.lsp.Config
+vim.lsp.config.lua_ls = {
   cmd = { "lua-language-server" },
   filetypes = { "lua" },
   root_markers = {
@@ -36,6 +37,6 @@ vim.lsp.config("lua_ls", {
       },
     },
   },
-})
+}
 
 vim.lsp.enable("lua_ls")

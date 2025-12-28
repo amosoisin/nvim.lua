@@ -21,6 +21,36 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
+-- 全LSPサーバー共通設定
+-- 個別のLSP設定とマージされる
+vim.lsp.config('*', {
+  capabilities = {
+    textDocument = {
+      completion = {
+        completionItem = {
+          snippetSupport = true,
+          commitCharactersSupport = true,
+          deprecatedSupport = true,
+          preselectSupport = true,
+        },
+        completionList = {
+          itemDefaults = {
+            'commitCharacters',
+            'editRange',
+            'insertTextFormat',
+            'insertTextMode',
+            'data',
+          }
+        }
+      },
+      -- Semantic tokensのサポート
+      semanticTokens = {
+        dynamicRegistration = false,
+      }
+    }
+  }
+})
+
 -- LspAttach autocommand - 全LSPサーバー共通のキーマップ設定
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)

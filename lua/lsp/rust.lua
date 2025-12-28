@@ -2,7 +2,8 @@
 -- インストール方法: cargo install rust-analyzer
 -- または: rustup component add rust-analyzer
 
-vim.lsp.config("rust_analyzer", {
+---@type vim.lsp.Config
+vim.lsp.config.rust_analyzer = {
   cmd = { "rust-analyzer" },
   filetypes = { "rust" },
   root_markers = {
@@ -25,6 +26,6 @@ vim.lsp.config("rust_analyzer", {
       },
     },
   },
-})
+}
 
 vim.lsp.enable("rust_analyzer")
