@@ -23,31 +23,9 @@ dependencies = {
 
 ---
 
-### 2. LSP設定の重複を解消
-
-**ファイル:** `config/lsp.lua` と `plugins/config/mason-lspconfig.lua`
-**問題:** LSP有効化が2箇所で重複
-
-**対応:**
-1. `config/lsp.lua`を削除
-2. `init.lua`から`require("config.lsp")`を削除
-
-**優先度:** 高 | **作業時間:** 10分
-
----
-
-### 3. 非推奨API使用の修正
-
-**ファイル:** `plugins/config/mason-lspconfig.lua:31`
-**修正:** `vim.lsp.diagnostic.on_publish_diagnostics` → `vim.diagnostic.on_publish_diagnostics`
-
-**優先度:** 高 | **作業時間:** 3分
-
----
-
 ## 🟡 緊急度: 中（近いうちに対応すべき）
 
-### 4. 古いPacker.nvim構文の更新
+### 2. 古いPacker.nvim構文の更新
 
 **ファイル:** `lua/plugins/depends.lua:10-11`
 **修正:** `after`, `requires` → `dependencies`に統一
@@ -56,7 +34,7 @@ dependencies = {
 
 ---
 
-### 5. Telescope基本設定とキーマップの追加
+### 3. Telescope基本設定とキーマップの追加
 
 **ファイル:** `lua/plugins/telescope.lua`
 **内容:** 基本的なキーマップ（<leader>ff, <leader>fg等）を追加
@@ -65,7 +43,7 @@ dependencies = {
 
 ---
 
-### 6. グローバルオプションの追加
+### 4. グローバルオプションの追加
 
 **ファイル:** `lua/config/options.lua`
 **追加項目:**
@@ -80,9 +58,30 @@ dependencies = {
 
 ## 🔵 緊急度: 低（余裕があれば対応）
 
-### ✅ 7. LSPキーマップの拡張
+現在、該当するタスクはありません。
 
-**ファイル:** `lua/plugins/config/mason-lspconfig.lua`
+---
+
+## ✅ 完了済みタスク
+
+### ビルトインLSPへの移行完了（2025-12-29）
+
+**実施内容:**
+- mason.nvim、mason-lspconfig.nvim、nvim-lspconfigプラグインを削除
+- `lua/lsp/`ディレクトリによる設定管理に移行
+- `lua/config/lsp.lua`による共通設定を追加
+- Neovim 0.11+のビルトインLSP機能（`vim.lsp.config()`, `vim.lsp.enable()`）を使用
+- ドット記法への統一（`vim.lsp.config.server_name = {...}`）
+- 型アノテーション追加（`---@type vim.lsp.Config`）
+
+**効果:**
+- プラグイン依存減少、起動時間改善、保守性向上
+
+---
+
+### LSPキーマップの拡張（2025-12-28）
+
+**ファイル:** `lua/config/lsp.lua`
 **実施内容:**
 - バッファ固定キーマップ設定（`buffer = bufnr`）
 - キーマップ説明追加（`desc`パラメータ）
@@ -92,11 +91,9 @@ dependencies = {
 - 署名ヘルプ（`<C-k>`）
 - フォーマット改善（非同期実行）
 
-**完了日:** 2025-12-28
-
 ---
 
-### ✅ 8. lazy-lock.jsonの管理確認
+### lazy-lock.jsonの管理確認（2025-12-28）
 
 **確認内容:**
 - lazy-lock.jsonは存在し、56個のプラグインバージョンを固定
@@ -105,11 +102,9 @@ dependencies = {
 
 **備考:** ユーザー判断に委ねる
 
-**完了日:** 2025-12-28
-
 ---
 
-### ✅ 9. README.mdの作成
+### README.mdの作成（2025-12-28）
 
 **ファイル:** `README.md`
 **作成内容:**
@@ -122,8 +117,6 @@ dependencies = {
 - トラブルシューティング
 - カスタマイズ方法
 
-**完了日:** 2025-12-28
-
 ---
 
 ## 📝 将来的な検討事項
@@ -135,4 +128,4 @@ dependencies = {
 
 ---
 
-**最終更新:** 2025-12-28
+**最終更新:** 2025-12-29

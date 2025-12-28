@@ -22,6 +22,10 @@
 nvim.lua/
 ├── init.lua                    # エントリーポイント
 ├── lazy-lock.json              # プラグインバージョン固定ファイル
+├── README.md                   # ユーザー向けドキュメント
+├── CLAUDE.md                   # このファイル（開発者向け指示）
+├── CHEATSHEET.md               # キーマップチートシート
+├── TODO.md                     # タスク管理
 │
 ├── lua/
 │   ├── config/                 # コア設定
@@ -53,12 +57,14 @@ nvim.lua/
 │       ├── markdown.lua        # Markdown対応
 │       │
 │       └── config/             # プラグイン個別設定
-│           ├── lualine.lua
-│           ├── none-ls.lua
-│           ├── noice.lua
-│           ├── incline.lua
 │           ├── gitsigns.lua
-│           └── ...
+│           ├── lualine.lua
+│           ├── noice.lua
+│           ├── none-ls.lua
+│           ├── nvim-surround.lua
+│           ├── nvim-treesitter-context.lua
+│           ├── tabset.lua
+│           └── vim-illuminate.lua
 ```
 
 ---
@@ -117,16 +123,19 @@ Neovim 0.11+のビルトインLSP機能（`vim.lsp.config()`, `vim.lsp.enable()`
    ```
 2. `lua/lsp/[server].lua`を作成:
    ```lua
-   vim.lsp.config("server_name", {
+   ---@type vim.lsp.Config
+   vim.lsp.config.server_name = {
      cmd = { "server-command", "--stdio" },
      filetypes = { "filetype" },
      root_markers = { ".git" },
      settings = {},
-   })
+   }
    vim.lsp.enable("server_name")
    ```
 3. `lua/lsp/init.lua`に追加: `require("lsp.server_name")`
 4. Neovim再起動で有効化
+
+**注意:** ドット記法（`vim.lsp.config.server_name = {...}`）を使用してください。型アノテーション（`---@type vim.lsp.Config`）も必ず追加してください。
 
 **利用可能なLSPキーマップ:**
 - 基本ナビゲーション: `K`, `gd`, `gD`, `gi`, `gt`, `gr`
@@ -146,51 +155,6 @@ Neovim 0.11+のビルトインLSP機能（`vim.lsp.config()`, `vim.lsp.enable()`
 ```lua
 -- lua/plugins/appearance.lua
 vim.cmd("colorscheme zenburn")  -- この行のコメントを切り替え
-```
-
----
-
-## 最近の改善（2025-12-28）
-
-### ✅ LSPキーマップの拡張完了
-
-**ファイル:** `lua/plugins/config/mason-lspconfig.lua`
-
-以下の機能を追加しました：
-- バッファ固定キーマップ（各LSPバッファ専用）
-- すべてのキーマップに説明を追加（which-key対応）
-- Telescope統合（`<leader>ds`: ドキュメントシンボル、`<leader>ws`: ワークスペースシンボル）
-- インレイヒント切り替え（`<leader>th`）
-- コードレンズ実行と自動更新（`<leader>cl`）
-- 署名ヘルプ（`<C-k>` インサートモード）
-- 非同期フォーマット実行
-
-### ✅ ドキュメント整備完了
-
-**作成ファイル:** `README.md`
-
-包括的なドキュメントを作成：
-- プロジェクト概要とインストール手順
-- ファイル構造の詳細説明
-- 主要キーマップ一覧（グローバル、LSP、Telescope、Git）
-- プラグイン管理とLSP設定の手順
-- トラブルシューティングガイド
-- カスタマイズ方法
-
-### ⚠️ lazy-lock.json管理の推奨
-
-**現状:** `.gitignore`に含まれており、git管理されていない
-
-**推奨:** git管理に含めることで以下のメリットがあります：
-- プラグインバージョンの再現性保証
-- チーム開発時のバージョン統一
-- 問題発生時のロールバック容易化
-
-**対応方法:**
-```bash
-# .gitignoreからlazy-lock.jsonを削除
-# lazy-lock.jsonをgit管理に追加
-git add lazy-lock.json
 ```
 
 ---
@@ -230,22 +194,28 @@ return {
 ```bash
 # 1. LSPサーバーをインストール（npmの例）
 npm install -g language-server-name
+```
 
-# 2. lua/lsp/[server].luaを作成
-# 以下の形式で設定を記述：
-# ---@type vim.lsp.Config
-# vim.lsp.config.server_name = {
-#   cmd = { "server-command", "--stdio" },
-#   filetypes = { "filetype" },
-#   root_markers = { ".git" },
-#   settings = {},
-# }
-# vim.lsp.enable("server_name")
+```lua
+-- 2. lua/lsp/[server].luaを作成
+-- 以下の形式で設定を記述（ドット記法）：
+---@type vim.lsp.Config
+vim.lsp.config.server_name = {
+  cmd = { "server-command", "--stdio" },
+  filetypes = { "filetype" },
+  root_markers = { ".git" },
+  settings = {},
+}
+vim.lsp.enable("server_name")
+```
 
-# 3. lua/lsp/init.luaに追加
+```lua
+-- 3. lua/lsp/init.luaに追加
 require("lsp.server_name")
+```
 
-# 4. Neovim再起動して動作確認
+```vim
+" 4. Neovim再起動して動作確認
 :LspInfo
 ```
 
@@ -415,6 +385,22 @@ mason.nvim、mason-lspconfig.nvim、nvim-lspconfigプラグインを削除し、
 - 設定の保守性向上（DRY原則に準拠）
 - 型安全性の強化（エディタ上でのエラー検出）
 - Lua言語の慣用的なスタイルに統一
+
+### ⚠️ lazy-lock.json管理の推奨
+
+**現状:** `.gitignore`に含まれており、git管理されていない
+
+**推奨:** git管理に含めることで以下のメリットがあります：
+- プラグインバージョンの再現性保証
+- チーム開発時のバージョン統一
+- 問題発生時のロールバック容易化
+
+**対応方法:**
+```bash
+# .gitignoreからlazy-lock.jsonを削除
+# lazy-lock.jsonをgit管理に追加
+git add lazy-lock.json
+```
 
 ---
 

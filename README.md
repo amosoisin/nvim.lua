@@ -5,7 +5,7 @@
 ## 特徴
 
 - **モダンなプラグイン管理**: lazy.nvimによる高速な起動と遅延読み込み
-- **完全なLSP対応**: Mason + nvim-lspconfig による統合LSP環境
+- **完全なLSP対応**: Neovim 0.11+ビルトインLSP機能による軽量で高速なLSP環境
 - **多言語サポート**: Python, C/C++, Bash, Lua, TypeScript, Docker等
 - **視覚的改善**: Treesitter構文ハイライト、カスタムステータスライン、アイコン対応
 - **Git統合**: Gitsigns, Lazygitによる快適なGitワークフロー
@@ -43,6 +43,10 @@ nvim
 nvim.lua/
 ├── init.lua                    # エントリーポイント
 ├── lazy-lock.json              # プラグインバージョン固定
+├── README.md                   # このファイル
+├── CLAUDE.md                   # 開発者向けガイド
+├── CHEATSHEET.md               # キーマップチートシート
+├── TODO.md                     # タスク管理
 │
 ├── lua/
 │   ├── config/                 # コア設定
@@ -50,12 +54,23 @@ nvim.lua/
 │   │   ├── options.lua        # Neovimオプション
 │   │   ├── appearance.lua     # 見た目設定
 │   │   ├── keymap.lua         # グローバルキーマップ
-│   │   └── filetype.lua       # ファイルタイプ設定
+│   │   ├── filetype.lua       # ファイルタイプ設定
+│   │   └── lsp.lua            # LSP共通設定
+│   │
+│   ├── lsp/                    # ビルトインLSP設定（Neovim 0.11+）
+│   │   ├── init.lua           # LSP設定読み込みエントリーポイント
+│   │   ├── bashls.lua         # Bash Language Server
+│   │   ├── pyright.lua        # Python
+│   │   ├── ts_ls.lua          # TypeScript/JavaScript
+│   │   ├── clangd.lua         # C/C++
+│   │   ├── lua_ls.lua         # Lua
+│   │   ├── rust.lua           # Rust
+│   │   └── docker.lua         # Docker
 │   │
 │   └── plugins/                # プラグイン定義
 │       ├── depends.lua         # 依存ライブラリ
 │       ├── global.lua          # 汎用プラグイン
-│       ├── lsp.lua             # LSP関連
+│       ├── lsp.lua             # LSP拡張プラグイン
 │       ├── appearance.lua      # UI/UX改善
 │       ├── telescope.lua       # ファジーファインダー
 │       ├── git.lua             # Git統合
@@ -63,10 +78,14 @@ nvim.lua/
 │       ├── markdown.lua        # Markdown対応
 │       │
 │       └── config/             # プラグイン個別設定
-│           ├── mason-lspconfig.lua
+│           ├── gitsigns.lua
 │           ├── lualine.lua
+│           ├── noice.lua
 │           ├── none-ls.lua
-│           └── ...
+│           ├── nvim-surround.lua
+│           ├── nvim-treesitter-context.lua
+│           ├── tabset.lua
+│           └── vim-illuminate.lua
 ```
 
 ## 主要なキーマップ
@@ -131,25 +150,51 @@ Gitsigns、LazygitプラグインによるGit統合機能が利用可能です�
 
 ## LSP設定
 
+このプロジェクトは**Neovim 0.11+のビルトインLSP機能**を使用しています。mason.nvim等のプラグインに依存せず、軽量で高速なLSP環境を実現しています。
+
 ### 有効化されているLSPサーバー
 
-- **Python**: pyright
-- **C/C++**: clangd
 - **Bash**: bashls
+- **Python**: pyright
+- **TypeScript/JavaScript**: ts_ls
+- **C/C++**: clangd
+
+### 設定ファイル作成済み（必要に応じて有効化可能）
+
 - **Lua**: lua_ls
-- **TypeScript**: ts_ls
+- **Rust**: rust_analyzer
 - **Docker**: docker_language_server
 
 ### LSPサーバーの追加
 
 ```bash
-# 1. Masonでインストール
-:MasonInstall <server_name>
+# 1. LSPサーバーをシステムにインストール（例: npm）
+npm install -g bash-language-server
 
-# 2. lua/plugins/config/mason-lspconfig.lua に追加
-vim.lsp.enable("<server_name>")
+# または cargo、apt等でインストール
+# cargo install rust-analyzer
+# sudo apt install clangd
+```
 
-# 3. 動作確認
+```lua
+-- 2. lua/lsp/[server].luaを作成
+---@type vim.lsp.Config
+vim.lsp.config.server_name = {
+  cmd = { "server-command", "--stdio" },
+  filetypes = { "filetype" },
+  root_markers = { ".git" },
+  settings = {},
+}
+vim.lsp.enable("server_name")
+```
+
+```lua
+-- 3. lua/lsp/init.luaに追加
+require("lsp.server_name")
+```
+
+```vim
+" 4. Neovim再起動して動作確認
 :LspInfo
 ```
 
@@ -158,8 +203,9 @@ vim.lsp.enable("<server_name>")
 ```vim
 :checkhealth lsp
 :LspInfo
-:Mason
 ```
+
+**注意:** Masonは`none-ls`等の他のツールをインストールするために残していますが、LSPサーバーの管理には使用していません。
 
 ## カラースキーム
 
@@ -239,4 +285,4 @@ vim.cmd("colorscheme zenburn")      -- 現在のテーマ
 
 ---
 
-**最終更新**: 2025-12-28
+**最終更新**: 2025-12-29
