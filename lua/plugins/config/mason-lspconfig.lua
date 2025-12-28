@@ -8,6 +8,7 @@ vim.lsp.enable("clangd")
 vim.lsp.enable("lua_ls")
 vim.lsp.enable("ts_ls")
 vim.lsp.enable("docker_language_server")
+vim.lsp.enable("rust-analyzer")
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
