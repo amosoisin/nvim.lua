@@ -12,6 +12,8 @@
 
 **方針:** lazy.nvimベースのモジュール化された設定、LSP完全対応、視覚的な改善
 
+**📖 ユーザー向けドキュメント:** 詳細なセットアップ方法やキーマップについては、[README.md](README.md)を参照してください。
+
 ---
 
 ## プロジェクト構造
@@ -27,7 +29,6 @@ nvim.lua/
 │   │   ├── options.lua        # Neovimオプション
 │   │   ├── appearance.lua     # 見た目設定
 │   │   ├── keymap.lua         # グローバルキーマップ
-│   │   ├── lsp.lua            # LSP基本設定（※要統合）
 │   │   └── filetype.lua       # ファイルタイプ設定
 │   │
 │   └── plugins/                # プラグイン定義
@@ -85,13 +86,29 @@ nvim.lua/
 
 ### 3. LSP設定の一元管理
 
-**現在の問題点:**
-- `config/lsp.lua`と`plugins/config/mason-lspconfig.lua`でLSP有効化が重複
-- 今後は`mason-lspconfig.lua`に統一すること
+**設定ファイル:** `plugins/config/mason-lspconfig.lua`
+
+すべてのLSP設定は`mason-lspconfig.lua`で一元管理されています。
+
+**現在有効なLSPサーバー:**
+- `pyright` (Python)
+- `bashls` (Bash)
+- `clangd` (C/C++)
+- `lua_ls` (Lua)
+- `ts_ls` (TypeScript/JavaScript)
+- `docker_language_server` (Docker)
 
 **LSPサーバー追加手順:**
 1. `plugins/config/mason-lspconfig.lua`に`vim.lsp.enable("server_name")`を追加
 2. Masonで必要に応じてサーバーをインストール: `:MasonInstall server_name`
+
+**利用可能なLSPキーマップ:**
+- 基本ナビゲーション: `K`, `gd`, `gD`, `gi`, `gt`, `gr`
+- アクション: `gn`, `ga`, `gf`
+- 診断: `ge`, `g]`, `g[`
+- シンボル検索: `<leader>ds`, `<leader>ws`
+- 機能切り替え: `<leader>th`, `<leader>cl`
+- 署名ヘルプ: `<C-k>` (インサートモード)
 
 ### 4. カラースキームとテーマ
 
@@ -107,36 +124,56 @@ vim.cmd("colorscheme zenburn")  -- この行のコメントを切り替え
 
 ---
 
+## 最近の改善（2025-12-28）
+
+### ✅ LSPキーマップの拡張完了
+
+**ファイル:** `lua/plugins/config/mason-lspconfig.lua`
+
+以下の機能を追加しました：
+- バッファ固定キーマップ（各LSPバッファ専用）
+- すべてのキーマップに説明を追加（which-key対応）
+- Telescope統合（`<leader>ds`: ドキュメントシンボル、`<leader>ws`: ワークスペースシンボル）
+- インレイヒント切り替え（`<leader>th`）
+- コードレンズ実行と自動更新（`<leader>cl`）
+- 署名ヘルプ（`<C-k>` インサートモード）
+- 非同期フォーマット実行
+
+### ✅ ドキュメント整備完了
+
+**作成ファイル:** `README.md`
+
+包括的なドキュメントを作成：
+- プロジェクト概要とインストール手順
+- ファイル構造の詳細説明
+- 主要キーマップ一覧（グローバル、LSP、Telescope、Git）
+- プラグイン管理とLSP設定の手順
+- トラブルシューティングガイド
+- カスタマイズ方法
+
+### ⚠️ lazy-lock.json管理の推奨
+
+**現状:** `.gitignore`に含まれており、git管理されていない
+
+**推奨:** git管理に含めることで以下のメリットがあります：
+- プラグインバージョンの再現性保証
+- チーム開発時のバージョン統一
+- 問題発生時のロールバック容易化
+
+**対応方法:**
+```bash
+# .gitignoreからlazy-lock.jsonを削除
+# lazy-lock.jsonをgit管理に追加
+git add lazy-lock.json
+```
+
+---
+
 ## 既知の問題と対応
 
-### 🔴 緊急度: 高
+### 現在、緊急対応が必要な問題はありません
 
-#### 1. markdown.luaの依存関係重複
-**ファイル:** `lua/plugins/markdown.lua:3-6`
-**問題:** `dependencies`が3回定義されている
-**対応:** mini.iconsのみを残して他を削除（TODO参照）
-
-#### 2. LSP設定の重複
-**ファイル:** `config/lsp.lua`, `plugins/config/mason-lspconfig.lua`
-**問題:** LSP有効化が二重に実行される可能性
-**対応:** `config/lsp.lua`を削除し、`mason-lspconfig.lua`に統合（TODO参照）
-
-#### 3. 非推奨API使用
-**ファイル:** `plugins/config/mason-lspconfig.lua:31`
-**問題:** `vim.lsp.diagnostic.on_publish_diagnostics`は非推奨
-**対応:** `vim.diagnostic.on_publish_diagnostics`に変更（TODO参照）
-
-### 🟡 緊急度: 中
-
-#### 4. 古いPacker.nvim構文
-**ファイル:** `lua/plugins/depends.lua:10-11`
-**問題:** `after`, `requires`はlazy.nvimでは非推奨
-**対応:** `dependencies`に統一（TODO参照）
-
-#### 5. Telescope基本設定の不足
-**ファイル:** `lua/plugins/telescope.lua`
-**問題:** キーマップや基本設定が未定義
-**対応:** 基本キーマップを追加（TODO参照）
+優先度高・中の問題は対応済みです。詳細はTODO.mdを参照してください。
 
 ---
 
