@@ -25,10 +25,14 @@ return {
     end,
   },
   {
-    "levouh/tint.nvim",
-    config = function()
-      require("tint").setup()
+    "miversen33/sunglasses.nvim",
+    config = function ()
+      require("sunglasses").setup({
+        filter_type = "SHADE",
+        filter_percent = .30,
+      })
     end,
+    event = "UIEnter",
   },
   {
     "folke/noice.nvim",
