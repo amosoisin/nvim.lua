@@ -29,12 +29,23 @@ nvim.lua/
 │   │   ├── options.lua        # Neovimオプション
 │   │   ├── appearance.lua     # 見た目設定
 │   │   ├── keymap.lua         # グローバルキーマップ
-│   │   └── filetype.lua       # ファイルタイプ設定
+│   │   ├── filetype.lua       # ファイルタイプ設定
+│   │   └── lsp.lua            # LSP共通設定（診断、ハンドラー、キーマップ）
+│   │
+│   ├── lsp/                    # ビルトインLSP設定（Neovim 0.11+）
+│   │   ├── init.lua           # LSP設定読み込みエントリーポイント
+│   │   ├── bashls.lua         # Bash
+│   │   ├── pyright.lua        # Python
+│   │   ├── ts_ls.lua          # TypeScript/JavaScript
+│   │   ├── clangd.lua         # C/C++
+│   │   ├── lua_ls.lua         # Lua
+│   │   ├── rust.lua           # Rust
+│   │   └── docker.lua         # Docker
 │   │
 │   └── plugins/                # プラグイン定義
 │       ├── depends.lua         # 依存ライブラリ（Treesitter等）
 │       ├── global.lua          # 汎用プラグイン
-│       ├── lsp.lua             # LSP関連プラグイン
+│       ├── lsp.lua             # LSP拡張プラグイン
 │       ├── appearance.lua      # UI/UX改善プラグイン
 │       ├── telescope.lua       # ファジーファインダー
 │       ├── git.lua             # Git統合
@@ -42,7 +53,6 @@ nvim.lua/
 │       ├── markdown.lua        # Markdown対応
 │       │
 │       └── config/             # プラグイン個別設定
-│           ├── mason-lspconfig.lua
 │           ├── lualine.lua
 │           ├── none-ls.lua
 │           ├── noice.lua
@@ -84,23 +94,39 @@ nvim.lua/
 - 頻繁に使用するプラグイン: `lazy = false`
 - 特定条件下のみ使用: `event`, `cmd`, `keys`, `ft`指定
 
-### 3. LSP設定の一元管理
+### 3. LSP設定の管理（Neovim 0.11+ ビルトインLSP使用）
 
-**設定ファイル:** `plugins/config/mason-lspconfig.lua`
+**設定ディレクトリ:** `lua/lsp/`、共通設定: `lua/config/lsp.lua`
 
-すべてのLSP設定は`mason-lspconfig.lua`で一元管理されています。
+Neovim 0.11+のビルトインLSP機能（`vim.lsp.config()`, `vim.lsp.enable()`）を使用し、mason.nvim等のプラグインに依存しない構成です。
 
 **現在有効なLSPサーバー:**
-- `pyright` (Python)
 - `bashls` (Bash)
-- `clangd` (C/C++)
-- `lua_ls` (Lua)
+- `pyright` (Python)
 - `ts_ls` (TypeScript/JavaScript)
-- `docker_language_server` (Docker)
+- `clangd` (C/C++)
+- `lua_ls` (Lua) - 要インストール
+- `rust_analyzer` (Rust) - 要インストール
+- `dockerls` (Docker) - 要インストール
 
 **LSPサーバー追加手順:**
-1. `plugins/config/mason-lspconfig.lua`に`vim.lsp.enable("server_name")`を追加
-2. Masonで必要に応じてサーバーをインストール: `:MasonInstall server_name`
+1. LSPサーバーをシステムにインストール（npm、cargo、apt等）
+   ```bash
+   # 例: Bash Language Server
+   npm install -g bash-language-server
+   ```
+2. `lua/lsp/[server].lua`を作成:
+   ```lua
+   vim.lsp.config("server_name", {
+     cmd = { "server-command", "--stdio" },
+     filetypes = { "filetype" },
+     root_markers = { ".git" },
+     settings = {},
+   })
+   vim.lsp.enable("server_name")
+   ```
+3. `lua/lsp/init.lua`に追加: `require("lsp.server_name")`
+4. Neovim再起動で有効化
 
 **利用可能なLSPキーマップ:**
 - 基本ナビゲーション: `K`, `gd`, `gD`, `gi`, `gt`, `gr`
@@ -202,13 +228,16 @@ return {
 ### LSPサーバー追加時
 
 ```bash
-# 1. Masonでインストール
-:MasonInstall language_server_name
+# 1. LSPサーバーをインストール（npmの例）
+npm install -g language-server-name
 
-# 2. lua/plugins/config/mason-lspconfig.lua に追加
-vim.lsp.enable("language_server_name")
+# 2. lua/lsp/[server].luaを作成
+# vim.lsp.config()とvim.lsp.enable()を記述
 
-# 3. 動作確認
+# 3. lua/lsp/init.luaに追加
+require("lsp.server_name")
+
+# 4. Neovim再起動して動作確認
 :LspInfo
 ```
 
@@ -253,7 +282,7 @@ keys = {
 
 ```vim
 :LspInfo            " LSP接続状態確認
-:Mason              " LSPサーバーインストール状態確認
+which server-name   " コマンドが存在するか確認（bash）
 :checkhealth lsp    " LSP健全性チェック
 ```
 
@@ -277,8 +306,7 @@ keys = {
 
 **公式ドキュメント:**
 - [lazy.nvim](https://github.com/folke/lazy.nvim)
-- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
-- [mason.nvim](https://github.com/williamboman/mason.nvim)
+- [Neovim LSP](https://neovim.io/doc/user/lsp.html) - ビルトインLSP機能
 
 **ヘルスチェック:**
 ```vim
@@ -289,4 +317,71 @@ keys = {
 
 ---
 
-**最終更新:** 2025-12-28
+## 最近の改善（2025-12-29）
+
+### ✅ ビルトインLSPへの移行完了
+
+mason.nvim、mason-lspconfig.nvim、nvim-lspconfigプラグインを削除し、Neovim 0.11+のビルトインLSP機能に完全移行しました。
+
+**変更内容:**
+- **削除**: mason関連プラグイン（4プラグイン: mason.nvim, mason-lspconfig.nvim, nvim-lspconfig, mason-null-ls.nvim）
+- **新規**: `lua/lsp/`ディレクトリによる設定管理
+- **新規**: `lua/config/lsp.lua`による共通設定
+- **効果**: プラグイン依存減少、起動時間改善、保守性向上
+
+**移行フェーズ:**
+1. **Phase 1: 準備・環境確認** ✅
+   - LSP共通設定ファイル作成（`lua/config/lsp.lua`）
+   - ビルトインLSP設定構造構築（`lua/lsp/init.lua`, `lua/lsp/bashls.lua`）
+   - bashlsで動作テスト
+
+2. **Phase 2: サーバー移行** ✅
+   - 以下のLSPサーバー設定ファイルを作成・有効化:
+     - `lua/lsp/bashls.lua` (Bash)
+     - `lua/lsp/pyright.lua` (Python)
+     - `lua/lsp/ts_ls.lua` (TypeScript/JavaScript)
+     - `lua/lsp/clangd.lua` (C/C++)
+   - 以下は設定ファイル作成済み（必要に応じて有効化可能）:
+     - `lua/lsp/lua_ls.lua` (Lua)
+     - `lua/lsp/rust.lua` (Rust)
+     - `lua/lsp/docker.lua` (Docker)
+
+3. **Phase 3: プラグイン削除** ✅
+   - `lua/plugins/lsp.lua`書き換え（mason系削除、LSP拡張プラグインのみ保持）
+   - `lua/plugins/config/mason-lspconfig.lua`削除
+   - `init.lua`に`require("config.lsp")`追加
+
+4. **Phase 4: ドキュメント更新** ✅
+   - CLAUDE.md更新（ファイル構造、LSP管理方法）
+
+### ✅ LSPハンドラー設定エラー修正
+
+移行直後に発生した`attempt to call upvalue 'handler' (a nil value)`エラーを修正しました。
+
+**エラー原因:**
+- `lua/config/lsp.lua`で設定していたLSPハンドラーが不適切
+- 特に`vim.diagnostic.on_publish_diagnostics`という関数は存在せず、これがnilになっていた
+- `vim.lsp.handlers["textDocument/hover"]`等の上書きも不要
+
+**修正内容:**
+- `lua/config/lsp.lua`から以下のハンドラー設定を削除:
+  ```lua
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = ...
+  vim.lsp.handlers["textDocument/hover"] = ...
+  vim.lsp.handlers["textDocument/signatureHelp"] = ...
+  ```
+- Neovim 0.11+では、診断設定は`vim.diagnostic.config()`のみで十分
+- ハンドラーの直接上書きは不要（デフォルト動作が適切）
+
+**維持される機能:**
+- 診断の仮想テキスト無効化、ボーダー表示（`vim.diagnostic.config()`で設定）
+- すべてのLSPキーマップ（K, gd, ge, gn, ga等）
+- Telescope統合、インレイヒント、コードレンズ
+
+**最終状態:**
+- 有効LSPサーバー: bashls, pyright, ts_ls, clangd（全て動作確認済み）
+- すべての既存LSP機能を維持しながら、プラグイン依存を削減した安定構成
+
+---
+
+**最終更新:** 2025-12-29

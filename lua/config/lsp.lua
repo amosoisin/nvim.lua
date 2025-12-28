@@ -1,15 +1,27 @@
-local lspconfig = require("lspconfig")
-require('mini.completion').setup({})
-require("mason-lspconfig").setup({})
+-- LSP共通設定ファイル
+-- ビルトインLSP機能を使用した設定
 
-vim.lsp.enable("pyright")
-vim.lsp.enable("bashls")
-vim.lsp.enable("clangd")
-vim.lsp.enable("lua_ls")
-vim.lsp.enable("ts_ls")
-vim.lsp.enable("docker_language_server")
-vim.lsp.enable("rust-analyzer")
+-- 診断設定
+vim.diagnostic.config({
+  virtual_text = false,  -- 仮想テキスト無効化
+  signs = true,
+  update_in_insert = false,
+  underline = true,
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+    source = 'always',
+  },
+})
 
+-- 診断サイン設定
+local signs = { Error = "󰅚 ", Warn = "󰀪 ", Hint = "󰌶 ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
+-- LspAttach autocommand - 全LSPサーバー共通のキーマップ設定
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local bufnr = args.buf
@@ -55,14 +67,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- 署名ヘルプ（インサートモード）
     vim.keymap.set('i', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { buffer = bufnr, desc = 'LSP: Signature help' })
   end
-
 })
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.diagnostic.on_publish_diagnostics, { virtual_text = false }
-)
-
-require("mason-null-ls").setup({
-  automatic_setup = true,
-  handlers = {},
-})
+-- ビルトインLSP設定を読み込み
+require("lsp")
