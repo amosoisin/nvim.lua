@@ -34,18 +34,6 @@ return {
     },
   },
 
-  -- LSP UI拡張
-  {
-      'nvimdev/lspsaga.nvim',
-      config = function()
-          require('lspsaga').setup({})
-      end,
-      dependencies = {
-          'nvim-treesitter/nvim-treesitter',
-          'nvim-tree/nvim-web-devicons',
-      }
-  },
-
   -- フォーマッタ・リンタ統合（none-ls）
   {
     "nvimtools/none-ls.nvim",
