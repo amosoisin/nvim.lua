@@ -78,4 +78,10 @@ return {
     event = "VeryLazy",
     opts = {},
   },
+  {
+    'jinh0/eyeliner.nvim',
+    config = function()
+      require("plugins.config.eyeliner")
+    end
+  }
 }
