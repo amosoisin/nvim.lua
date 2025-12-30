@@ -185,4 +185,12 @@ return {
       require("bufferline").setup{}
     end,
   },
+  {
+    -- タスク実行用
+    'stevearc/overseer.nvim',
+    opts = {},
+    config = function ()
+      require("overseer").setup()
+    end
+  }
 }
