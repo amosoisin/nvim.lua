@@ -45,4 +45,24 @@ return {
       require("plugins.config.none-ls")
     end,
   },
+
+  -- VirtualTextをinline表示
+  {
+      "rachartier/tiny-inline-diagnostic.nvim",
+      event = "VeryLazy",
+      priority = 1000,
+      opts = {},
+      config = function()
+        require("tiny-inline-diagnostic").setup({
+          options = {
+            multilines = {
+              enabled = true,
+            },
+            show_source = {
+              enabled = true,
+            }
+          },
+        })
+      end,
+  },
 }

@@ -3,7 +3,7 @@
 
 -- 診断設定
 vim.diagnostic.config({
-  virtual_text = false,  -- 仮想テキスト無効化
+  virtual_text = true,  -- 仮想テキスト有効化
   signs = true,
   update_in_insert = false,
   underline = true,
