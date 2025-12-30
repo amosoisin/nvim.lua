@@ -7,10 +7,11 @@
 - **モダンなプラグイン管理**: lazy.nvimによる高速な起動と遅延読み込み
 - **完全なLSP対応**: Neovim 0.11+ビルトインLSP機能による軽量で高速なLSP環境
 - **多言語サポート**: Python, C/C++, Bash, Lua, TypeScript, Docker等
-- **視覚的改善**: Treesitter構文ハイライト、カスタムステータスライン、アイコン対応
+- **視覚的改善**: Treesitter構文ハイライト、カスタムステータスライン、アイコン対応、f/t/F/Tジャンプ先ハイライト
 - **Git統合**: Gitsigns, Lazygitによる快適なGitワークフロー
-- **Claude Code統合**: AI支援コーディング
-- **モジュール構成**: 保守性の高い設定ファイル構造
+- **Claude Code統合**: AI支援コーディング（`<leader>a`系キーマップ）
+- **編集効率化**: 自動括弧入力、jk加速、検索置換UI、関数コメント自動生成
+- **モジュール構成**: 保守性の高い設定ファイル構造（edit.lua等で機能別に分離）
 
 ## 前提条件
 
@@ -70,6 +71,7 @@ nvim.lua/
 │   └── plugins/                # プラグイン定義
 │       ├── depends.lua         # 依存ライブラリ
 │       ├── global.lua          # 汎用プラグイン
+│       ├── edit.lua            # 編集用プラグイン
 │       ├── lsp.lua             # LSP拡張プラグイン
 │       ├── appearance.lua      # UI/UX改善
 │       ├── telescope.lua       # ファジーファインダー
@@ -85,10 +87,13 @@ nvim.lua/
 │           ├── nvim-surround.lua
 │           ├── nvim-treesitter-context.lua
 │           ├── tabset.lua
-│           └── vim-illuminate.lua
+│           ├── vim-illuminate.lua
+│           └── eyeliner.lua
 ```
 
 ## 主要なキーマップ
+
+**詳細なキーマップは[CHEATSHEET.md](CHEATSHEET.md)を参照してください。**
 
 ### グローバルキーマップ
 
@@ -125,11 +130,47 @@ nvim.lua/
 
 ### Telescopeキーマップ
 
-Telescopeプラグインの設定により、ファジーファインダー機能が利用可能です。
+| キー | モード | 機能 |
+|------|--------|------|
+| `<leader>ff` | Normal | ファイル検索 |
+| `<leader>fg` | Normal | Live Grep |
+| `<leader>fb` | Normal | バッファ一覧 |
+| `<leader>fr` | Normal | 最近開いたファイル |
+| `<leader>fh` | Normal | ヘルプタグ検索 |
+| `<leader>tg` | Normal/Visual | Grep String |
 
 ### Gitキーマップ
 
-Gitsigns、LazygitプラグインによるGit統合機能が利用可能です。
+| キー | モード | 機能 |
+|------|--------|------|
+| `]c` / `[c` | Normal | 次/前の変更箇所へ |
+| `<leader>hs` | Normal/Visual | Hunkをステージ |
+| `<leader>hr` | Normal/Visual | Hunkをリセット |
+| `<leader>hp` | Normal | Hunkプレビュー |
+| `<leader>hb` | Normal | Blame表示 |
+| `<leader>lg` | Normal | LazyGit起動 |
+
+### 編集機能
+
+| キー | モード | 機能 |
+|------|--------|------|
+| `gcc` / `gc` | Normal/Visual | コメント切り替え |
+| `ys<motion><char>` | Normal | 囲い文字追加（nvim-surround） |
+| `ds<char>` | Normal | 囲い文字削除 |
+| `cs<old><new>` | Normal | 囲い文字変更 |
+| `<C-l>` | Insert | 括弧から脱出 |
+| `<leader>d` | Normal | 関数コメント自動生成（vim-doge） |
+
+### Claude Code（AI支援）
+
+| キー | モード | 機能 |
+|------|--------|------|
+| `<leader>ac` | Normal | Claude Code起動/停止 |
+| `<leader>af` | Normal | Claude Codeフォーカス |
+| `<leader>ab` | Normal | 現在のバッファを追加 |
+| `<leader>as` | Visual | 選択範囲を送信 |
+| `<leader>aa` | Normal | Diff承認 |
+| `<leader>ad` | Normal | Diff拒否 |
 
 ## プラグイン管理
 
@@ -285,4 +326,24 @@ vim.cmd("colorscheme zenburn")      -- 現在のテーマ
 
 ---
 
-**最終更新**: 2025-12-29
+## 最近の更新
+
+### 2025-12-31
+
+- **編集用プラグインの分離**: `lua/plugins/edit.lua`を新規作成し、編集関連プラグインを整理
+- **新プラグイン追加**:
+  - accelerated-jk.nvim: jk移動の加速
+  - grug-far.nvim: 検索・置換UI
+  - vim-doge: 関数コメント自動生成
+  - eyeliner.nvim: f/F/t/Tジャンプ先ハイライト
+- **ドキュメント更新**: CHEATSHEET.mdを網羅的に更新、すべてのキーマップとコマンドを記載
+
+### 2025-12-29
+
+- **ビルトインLSPへの移行**: Neovim 0.11+のビルトインLSP機能に完全移行
+- mason関連プラグインを削除し、軽量で高速なLSP環境を実現
+- ブログ記事推奨（eiji.page）に準拠したベストプラクティスを適用
+
+---
+
+**最終更新**: 2025-12-31

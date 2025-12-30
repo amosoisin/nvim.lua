@@ -49,6 +49,7 @@ nvim.lua/
 │   └── plugins/                # プラグイン定義
 │       ├── depends.lua         # 依存ライブラリ（Treesitter等）
 │       ├── global.lua          # 汎用プラグイン
+│       ├── edit.lua            # 編集用プラグイン
 │       ├── lsp.lua             # LSP拡張プラグイン
 │       ├── appearance.lua      # UI/UX改善プラグイン
 │       ├── telescope.lua       # ファジーファインダー
@@ -64,7 +65,8 @@ nvim.lua/
 │           ├── nvim-surround.lua
 │           ├── nvim-treesitter-context.lua
 │           ├── tabset.lua
-│           └── vim-illuminate.lua
+│           ├── vim-illuminate.lua
+│           └── eyeliner.lua
 ```
 
 ---
@@ -404,4 +406,33 @@ git add lazy-lock.json
 
 ---
 
-**最終更新:** 2025-12-29
+## 最近の改善（2025-12-31）
+
+### ✅ 編集用プラグインの分離
+
+global.luaから編集用プラグインを`lua/plugins/edit.lua`に分離しました。
+
+**移動したプラグイン:**
+- nvim-autopairs - 括弧等のペアを自動入力
+- nvim-surround - タグやクォーテーション編集
+- Comment.nvim - コメント化
+- in-and-out.nvim - `<C-l>`で括弧から脱出
+- vim-doge - 関数コメント自動生成（`<leader>d`）
+
+**効果:** モジュール性向上、設定の整理
+
+### ✅ 新プラグインの追加
+
+以下のプラグインが追加されました：
+
+**編集効率化:**
+- **accelerated-jk.nvim**: `j`と`k`を押し続けると加速
+- **grug-far.nvim**: 検索・置換用UI（`:GrugFarWithin`コマンド）
+- **vim-doge**: 関数上で`<leader>d`を押して関数コメント自動生成
+
+**ビジュアル改善:**
+- **eyeliner.nvim**: `f`/`F`/`t`/`T`のジャンプ先をハイライト
+
+---
+
+**最終更新:** 2025-12-31
