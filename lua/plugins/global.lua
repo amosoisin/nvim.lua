@@ -1,24 +1,13 @@
 return {
   {
-    'windwp/nvim-autopairs',
-    event = "InsertEnter",
-    opts = {}
-  },
-  {
+    -- 行移動
     'nacro90/numb.nvim',
     config = function()
       require('numb').setup()
     end,
   },
   {
-    "kylechui/nvim-surround",
-    version = "^3.0.0", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
-    config = function()
-      require("plugins.config.nvim-surround")
-    end,
-  },
-  {
+    -- キーマップのヒントを表示
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
@@ -37,18 +26,7 @@ return {
     },
   },
   {
-    'prochri/telescope-all-recent.nvim',
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-      "kkharji/sqlite.lua",
-      -- optional, if using telescope for vim.ui.select
-      "stevearc/dressing.nvim"
-    },
-    opts = {
-      -- your config goes here
-    }
-  },
-  {
+    -- スクロールバーを表示
     "petertriho/nvim-scrollbar",
     dependencies = {
       'kevinhwang91/nvim-hlslens',
@@ -59,6 +37,7 @@ return {
     end
   },
   {
+    -- ファイラ
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
     dependencies = {
@@ -76,6 +55,7 @@ return {
     }
   },
   {
+    -- トラブル情報を表示
     "folke/trouble.nvim",
     opts = {}, -- for default options, refer to the configuration section for custom setup.
     cmd = "Trouble",
@@ -113,38 +93,22 @@ return {
     },
   },
   {
-      'numToStr/Comment.nvim',
-      opts = {
-          -- add any options here
-      }
+    -- HopAnywhereで移動
+    'smoka7/hop.nvim',
+    version = "*",
+    opts = {
+      keys = 'etovxqpdygfblzhckisuran'
+    }
   },
   {
-      'smoka7/hop.nvim',
-      version = "*",
-      opts = {
-          keys = 'etovxqpdygfblzhckisuran'
-      }
-  },
-  {
-    "ysmb-wtsg/in-and-out.nvim",
-      keys = {
-        {
-          "<C-l>",
-          function()
-              require("in-and-out").in_and_out()
-          end,
-          mode = "i"
-        },
-      },
-    opts = { additional_targets = { "“", "”" } },
-  },
-  {
+    -- 言語ごとにタブ設定
     "FotiadisM/tabset.nvim",
     config = function()
-        require("plugins.config.tabset")
+      require("plugins.config.tabset")
     end,
   },
   {
+    -- コードの塊の先頭を画面上部に表示
     "nvim-treesitter/nvim-treesitter-context",
     event = { "BufNewFile", "BufReadPre" },
     config = function()
@@ -152,11 +116,9 @@ return {
     end,
   },
   {
+    -- 編集履歴を表示して、Undoできる
     "XXiaoA/atone.nvim",
     cmd = "Atone",
     opts = {}, -- your configuration here
-  },
-  {
-    'kkoomen/vim-doge',
   },
 }
