@@ -151,4 +151,9 @@ return {
       require("plugins.config.nvim-treesitter-context")
     end,
   },
+  {
+    "XXiaoA/atone.nvim",
+    cmd = "Atone",
+    opts = {}, -- your configuration here
+  },
 }
