@@ -221,4 +221,13 @@ return {
       })
     end,
   },
+  {
+    -- Vimの悪い習慣を矯正する
+    "m4xshen/hardtime.nvim",
+    lazy = false,
+    dependencies = { "MunifTanjim/nui.nvim" },
+    config = function()
+      require("hardtime").setup()
+    end,
+  },
 }
