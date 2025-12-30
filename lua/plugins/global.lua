@@ -108,14 +108,6 @@ return {
     end,
   },
   {
-    -- コードの塊の先頭を画面上部に表示
-    "nvim-treesitter/nvim-treesitter-context",
-    event = { "BufNewFile", "BufReadPre" },
-    config = function()
-      require("plugins.config.nvim-treesitter-context")
-    end,
-  },
-  {
     -- 編集履歴を表示して、Undoできる
     "XXiaoA/atone.nvim",
     cmd = "Atone",
