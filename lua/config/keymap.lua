@@ -11,6 +11,3 @@ vim.keymap.set('n', '<Esc><Esc>', ':nohlsearch<CR>', opts)
 -- バッファ移動（Ctrl+h / Ctrl+l）
 vim.keymap.set('n', '<C-h>', ':bprev<CR>', opts)
 vim.keymap.set('n', '<C-l>', ':bnext<CR>', opts)
-
--- インサートモードで jj → Esc
-vim.keymap.set('i', 'jj', '<Esc>', opts)
