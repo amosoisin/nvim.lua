@@ -156,4 +156,7 @@ return {
     cmd = "Atone",
     opts = {}, -- your configuration here
   },
+  {
+    'kkoomen/vim-doge',
+  },
 }
