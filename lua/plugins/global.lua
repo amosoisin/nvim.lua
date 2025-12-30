@@ -153,4 +153,26 @@ return {
       });
     end
   },
+  {
+    -- コード内のシンボルを検索、ジャンプ
+    "bassamsdata/namu.nvim",
+    opts = {
+      global = { },
+      namu_symbols = { -- Specific Module options
+        options = {},
+      },
+    },
+    keys = {
+      {
+        "<leader>ss",
+        ":Namu symbols<cr>",
+        desc = "Jump to LSP symbols",
+      },
+      {
+        "<leader>sw",
+        ":Namu workspace<cr>",
+        desc = "LSP Symbols - Workspace",
+      },
+    }
+  },
 }
