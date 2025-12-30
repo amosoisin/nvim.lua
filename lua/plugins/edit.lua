@@ -42,4 +42,13 @@ return {
     -- <Tab>で移動
     'kkoomen/vim-doge',
   },
+  {
+    -- <space>s|m|jで構造化されたコードを複数行に展開、一行にまとめる
+    'Wansmer/treesj',
+    keys = { '<space>m', '<space>j', '<space>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' }, -- if you install parsers with `nvim-treesitter`
+    config = function()
+      require('treesj').setup({--[[ your config ]]})
+    end,
+  },
 }
