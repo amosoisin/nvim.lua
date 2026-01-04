@@ -11,3 +11,5 @@ require("lsp.clangd")
 require("lsp.lua_ls")
 require("lsp.rust")
 require("lsp.docker")
+
+require("lsp.autotools_ls")
