@@ -101,6 +101,30 @@
 | `<leader>th` | Normal | インレイヒント切り替え | インレイヒントの表示/非表示 |
 | `<leader>cl` | Normal | コードレンズ実行 | 利用可能なコードレンズアクションを実行 |
 
+### LSP設定について
+
+**Neovim 0.11+ ビルトインLSP使用**
+
+この設定では、Neovim 0.11以降のビルトインLSP機能（`vim.lsp.config()`, `vim.lsp.enable()`）を使用しています。mason.nvimやnvim-lspconfigなどのプラグインには依存していません。
+
+**有効なLSPサーバー:**
+- `bashls` (Bash) - Bash Language Server
+- `pyright` (Python) - Python LSP
+- `ts_ls` (TypeScript/JavaScript) - TypeScript Language Server
+- `clangd` (C/C++) - Clang Language Server
+- `autotools_ls` (Autotools) - Autotools Language Server (configure.ac, Makefile.am等)
+- `lua_ls` (Lua) - Lua Language Server ※要インストール
+- `rust_analyzer` (Rust) - Rust Language Server ※要インストール
+- `dockerls` (Docker) - Docker Language Server ※要インストール
+
+**LSPサーバーの追加方法:**
+1. サーバーをインストール（例: `npm install -g bash-language-server`）
+2. `lua/lsp/[server].lua` に設定ファイルを作成
+3. `lua/lsp/init.lua` に読み込みを追加
+4. Neovim再起動
+
+詳細は `CLAUDE.md` を参照してください。
+
 ---
 
 ## Telescope（ファジーファインダー）
@@ -228,6 +252,19 @@
 | `<space>j` | Normal | 一行にまとめる | 構造化されたコードを一行にまとめる |
 | `<space>s` | Normal | 分割/結合トグル | 一行↔複数行を切り替え |
 
+### ヤンク履歴（Yanky）
+
+| キー | モード | 機能 | 説明 |
+|------|--------|------|------|
+| `<leader>p` | Normal/Visual | ヤンク履歴表示 | 過去のヤンク履歴を表示 |
+| `y` | Normal/Visual | ヤンク | テキストをヤンク（履歴に保存） |
+| `p` | Normal/Visual | 貼り付け（後） | カーソル後に貼り付け |
+| `P` | Normal/Visual | 貼り付け（前） | カーソル前に貼り付け |
+| `<C-p>` | Normal | 前の履歴 | ヤンク履歴の前のエントリーを選択 |
+| `<C-n>` | Normal | 次の履歴 | ヤンク履歴の次のエントリーを選択 |
+| `]p`/`[p` | Normal | インデント付き貼り付け | インデントを調整して貼り付け |
+| `>p`/`<p` | Normal | シフト付き貼り付け | 右/左にシフトして貼り付け |
+
 ### 高速移動
 
 | 機能 | 説明 |
@@ -346,6 +383,7 @@
 | コンテキスト表示 | nvim-treesitter-context | コードブロックの先頭を画面上部に固定 |
 | バッファタブ表示 | bufferline.nvim | バッファをタブとして画面上部に表示 |
 | スムーススクロール | neoscroll.nvim | `<C-u>`、`<C-d>`等のスクロールを滑らかに |
+| ぱんくずリスト | barbecue.nvim | コードのコンテキスト（関数名等）を画面上部に表示 |
 
 ### カラースキーム
 
@@ -387,6 +425,17 @@
 ### Markdown（render-markdown.nvim）
 
 Markdownファイルを開くと自動的にレンダリングされます。
+
+### LeetCode（leetcode.nvim）
+
+LeetCode問題の閲覧・提出をNeovim内で実行できます。
+
+```vim
+:Leet              " LeetCodeダッシュボードを開く
+:Leet list         " 問題一覧を表示
+:Leet run          " コードを実行
+:Leet submit       " コードを提出
+```
 
 ---
 
@@ -460,7 +509,7 @@ Markdownファイルを開くと自動的にレンダリングされます。
 
 ---
 
-**最終更新:** 2025-12-31
+**最終更新:** 2026-01-04
 
 **関連ドキュメント:**
 - [README.md](README.md) - プロジェクト概要とセットアップ
