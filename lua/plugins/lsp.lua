@@ -1,6 +1,5 @@
 ---@type LazyPluginSpec
 return {
-  -- ビルトインLSP使用のため、mason関連プラグインは削除
   -- LSP設定はlua/lsp/配下で管理
 
   -- LSP補完プラグイン
