@@ -18,6 +18,11 @@ require("tabset").setup({
       tabstop = 8,
       expandtab = false,
     },
+    sh = {
+      tabwidth = 4,
+      tabstop = 4,
+      expandtab = false,
+    },
     make = {
       tabwidth = 8,
       tabstop = 8,
