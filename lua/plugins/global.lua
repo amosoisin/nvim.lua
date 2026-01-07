@@ -7,6 +7,13 @@ return {
     end,
   },
   {
+    -- Insertモード時のみ絶対行表示、それ以外は相対行表示
+    "nkakouros-original/numbers.nvim",
+    config = function ()
+      require('numbers').setup()
+    end,
+  },
+  {
     -- キーマップのヒントを表示
     "folke/which-key.nvim",
     event = "VeryLazy",
