@@ -37,6 +37,11 @@ require("tabset").setup({
       tabstop = 4,
       expandtab = true,
     },
+    nix = {
+      tabwidth = 2,
+      tabstop = 2,
+      expandtab = true,
+    },
     {
       filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "json", "yaml" },
       config = {
