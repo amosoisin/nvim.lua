@@ -115,6 +115,12 @@ return {
     end,
   },
   {
+    'nmac427/guess-indent.nvim',
+    config = function()
+      require('guess-indent').setup {}
+    end,
+  },
+  {
     -- 編集履歴を表示して、Undoできる
     "XXiaoA/atone.nvim",
     cmd = "Atone",
