@@ -1,6 +1,6 @@
 require("lualine").setup{
   options = {
-    theme = 'zenburn', -- lualine theme
+    theme = 'auto', -- lualine theme
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
     disabled_filetypes = {     -- Filetypes to disable lualine for.
